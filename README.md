@@ -90,6 +90,8 @@ You can also build the docker image and then start both the application and Azur
 ### Unit tests
 To execute the unit tests for the application, run the following command: `yarn test`
 
+To run the unit tests and also generate a JUnit-compatible XML report run the following command: `yarn test:report`
+
 ### Cucumber acceptance tests
 There are acceptance tests for the application written in the [Gherkin](https://cucumber.io/docs/gherkin/) language. To execute these tests follow these steps:
 
@@ -97,7 +99,7 @@ There are acceptance tests for the application written in the [Gherkin](https://
 2. Make sure `ACCEPTANCE_TEST_BASE_URL` is configured correctly in `.env`, see previous section on configuration
 3. Run the following command `yarn test:acceptance`
 
-To run the acceptance tests and also generate and open an HTML report for the acceptance tests run the following command:
+To run the acceptance tests and also generate a JUnit-compatible XML report and an HTML report that will be opened in the default browser run the following command:
 `yarn test:acceptance:report`
 
 ## API
