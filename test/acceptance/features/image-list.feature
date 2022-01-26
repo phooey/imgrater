@@ -1,7 +1,8 @@
 @image-list
 Feature: Image list
 
-  As a user I want to retrieve a list of uploaded images
+  As a user
+  I want to retrieve a list of uploaded images
   so that I know which images I can download
 
   Background:

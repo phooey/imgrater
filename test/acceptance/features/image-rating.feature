@@ -1,7 +1,8 @@
 @image-rating
 Feature: Image rating
 
-  As a user I want to rate and see the rating of uploaded images
+  As a user
+  I want to rate and see the rating of uploaded images
   so that I can share my opinion and know which images are popular
 
   Background:

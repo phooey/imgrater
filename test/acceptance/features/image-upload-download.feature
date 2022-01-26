@@ -1,7 +1,8 @@
 @image-upload-download
 Feature: Image upload and download
 
-  As a user I want to upload and download images
+  As a user
+  I want to upload and download images
   so that I can share my images with other users
 
   Background:
