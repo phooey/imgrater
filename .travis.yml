@@ -1,0 +1,8 @@
+language: node_js
+node_js:
+  - 16
+script:
+  - yarn --frozen-lockfile
+  - yarn test:report
+  - yarn start
+  - yarn test:acceptance:report

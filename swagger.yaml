@@ -1,0 +1,257 @@
+openapi: 3.0.0
+info:
+  title: Imgrater API
+  description: API for uploading, downloading and rating images
+  version: 0.1.9
+paths:
+  /images:
+    get:
+      summary: Returns a list of image UUIDs
+      responses:
+        "200":
+          description: A JSON array of image UUIDs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/imageUuid"
+              examples:
+                emptyList:
+                  $ref: "#/components/examples/emptyList"
+                listWithTwoElements:
+                  $ref: "#/components/examples/imageUuidList"
+        "500":
+          description: Could not list images, try again later
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+              example:
+                message: Could not list images, try again later
+    post:
+      summary: Upload an image
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+      responses:
+        "201":
+          description: A UUID for the uploaded image
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/imageUuid"
+              examples:
+                imageUuid:
+                  $ref: "#/components/examples/imageUuid"
+        "400":
+          description: File is not an image
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+              examples:
+                fileNotAnImage:
+                  summary: File is not an image
+                  value:
+                    message: File is not an image
+                missingImage:
+                  summary: Image missing in request
+                  value:
+                    message: Image missing in request
+        "500":
+          description: Could not upload image, try again later
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+              example:
+                message: Could not upload image, try again later
+  /images/{imageUuid}:
+    get:
+      summary: Download the image with the specified UUID
+      parameters:
+        - $ref: "#/components/parameters/imageUuid"
+      responses:
+        "200":
+          description: Returns the image file with the specified UUID
+          content:
+            image/*:
+              schema:
+                type: string
+                format: binary
+                example: <image content>
+        "404":
+          $ref: "#/components/responses/notFound"
+        "500":
+          description: Could not download image, try again later
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+              example:
+                message: Could not download image, try again later
+  /images/{imageUuid}/rating:
+    get:
+      summary: Get the rating for the image with the specified UUID
+      parameters:
+        - $ref: "#/components/parameters/imageUuid"
+      responses:
+        "200":
+          description: Returns the rating for the image
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/rating"
+              examples:
+                negativeRating:
+                  $ref: "#components/examples/negativeRating"
+                netrualRating:
+                  $ref: "#components/examples/neutralRating"
+                positiveRating:
+                  $ref: "#components/examples/positiveRating"
+        "404":
+          $ref: "#/components/responses/notFound"
+        "500":
+          description: Could not retrieve image rating, try again later
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+              example:
+                message: Could not retrieve image rating, try again later
+    post:
+      summary: Rate the image with the specified UUID
+      parameters:
+        - $ref: "#/components/parameters/imageUuid"
+      requestBody:
+        description: The direction to rate the image, either "up" or "down"
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                direction:
+                  type: string
+                  enum: [up, down]
+                  description: To increase the rating of the image "up", to decrease the rating of the image "down"
+            examples:
+              up:
+                value:
+                  direction: up
+                summary: Increase the rating of the image
+              down:
+                value:
+                  direction: down
+                summary: Decrease the rating of the image
+      responses:
+        "200":
+          description: The new rating after rating the image
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/rating"
+              examples:
+                negativeRating:
+                  $ref: "#components/examples/negativeRating"
+                netrualRating:
+                  $ref: "#components/examples/neutralRating"
+                positiveRating:
+                  $ref: "#components/examples/positiveRating"
+        "400":
+          description: Invalid rating direction
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+              example:
+                message: Invalid rating direction
+        "404":
+          $ref: "#/components/responses/notFound"
+        "500":
+          description: Could not rate image, try again later
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+              example:
+                message: Could not rate image, try again later
+
+components:
+  responses:
+    notFound:
+      description: Image could not be found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/error"
+          example:
+            message: An image with the specified UUID could not be found
+  parameters:
+    imageUuid:
+      in: path
+      name: imageUuid
+      schema:
+        $ref: "#/components/schemas/imageUuid"
+      required: true
+      description: UUID of the image
+      examples:
+        imageUuid:
+          $ref: "#/components/examples/exampleUuid"
+  schemas:
+    error:
+      title: An occured error
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+      required:
+        - message
+    imageUuid:
+      title: UUID of an image
+      type: object
+      properties:
+        uuid:
+          type: string
+    rating:
+      title: The rating of an image
+      type: object
+      properties:
+        rating:
+          type: number
+  examples:
+    emptyList:
+      value: []
+      summary: An empty list
+    exampleUuid:
+      value: "9b3e90de-4489-11ec-81d3-0242ac130003"
+      summary: An example image UUID
+    imageUuid:
+      value:
+        uuid: "9b3e90de-4489-11ec-81d3-0242ac130003"
+      summary: An example image UUID
+    imageUuidList:
+      value:
+        - uuid: "9b3e90de-4489-11ec-81d3-0242ac130003"
+        - uuid: "9f06a580-4489-11ec-81d3-0242ac130003"
+      summary: A list with two example image UUIDs
+    negativeRating:
+      value:
+        rating: -1
+      summary: A negative image rating
+    neutralRating:
+      value:
+        rating: 0
+      summary: A neutral image rating
+    positiveRating:
+      value:
+        rating: 1
+      summary: A positive image rating

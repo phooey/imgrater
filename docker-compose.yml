@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  imgrater:
+    build: .
+    env_file: .env.docker
+    ports:
+      - "${PORT}:${PORT}"
+  azurite:
+    image: "mcr.microsoft.com/azure-storage/azurite"
+    command: "azurite-blob --blobHost 0.0.0.0 --blobPort 10000 --loose"
+    ports:
+      - "10000:10000"
