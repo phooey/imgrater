@@ -1,7 +1,9 @@
 # Imgrater
-Very small example project using Behavior Driven Development (BDD) with Cucumber, Node.js and TypeScript to develop an image uploading and rating web application.
+Very small example project using Behavior Driven Development (BDD) with Cucumber, Node.js and TypeScript to develop an image uploading, downloading and rating web application.
 
-Under development and currently only provides a single microservice with a REST API to upload, download and rate image files. Only intended as an example project.
+Under development and currently only provides a single microservice with a REST API to upload, download and rate image files.
+
+Important notice: this is only intended as an example project on behavior-driven development with Cucumber. There are many issues that have not been taken into account, such as concurrency, security and user management. The application is in no way intended for any kind of production use in its current state.
 
 ## Dependencies
 The following dependencies are necessary for developing and/or running the application. Dependencies not mentioned here will be resolved through yarn, refer the projects package.json file to see them.
