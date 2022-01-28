@@ -26,3 +26,8 @@ jobs:
       - run: yarn --frozen-lockfile
       - run: yarn lint
       - run: yarn test:report
+      - name: Publish unit test results
+        uses: EnricoMi/publish-unit-test-result-action/composite@v1
+        if: always()
+        with:
+          files: reports/**/*.xml
